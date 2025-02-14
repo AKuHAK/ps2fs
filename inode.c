@@ -752,7 +752,7 @@ dprintk("   found! %08lX\n",bh_result->b_blocknr);
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,0)
 	bh_result->b_state |= (1UL << BH_New);
 #endif
-dprintk("   added! %08lX\n",bh_result->b_blocknr); 
+dprintk("   added! %08lX\n",bh_result->b_blocknr);
 	return 0;
     }
 
