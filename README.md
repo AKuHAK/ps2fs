@@ -34,6 +34,13 @@ For MIPS targets (PlayStation 2), the module is compiled with kernel version 2.4
 make mips MIPS_KERNEL_VERSION=2.4.27_mvl21
 ```
 
+For kernel versions other than 2.4.17, you may also need to set the `MIPS_LINUX_VERSION_CODE`:
+
+```bash
+# For kernel 2.4.27: KERNEL_VERSION(2,4,27) = (2<<16) + (4<<8) + 27 = 132123
+make mips MIPS_KERNEL_VERSION=2.4.27_mvl21 MIPS_LINUX_VERSION_CODE=132123
+```
+
 This ensures the compiled module matches your target kernel version and avoids "kernel-module version mismatch" errors during `insmod`.
 
 ## Mounting the Filesystem
