@@ -50,7 +50,8 @@ long count_used_blocks(struct super_block *sb)
 	nblocks = ((sbinfo->size[part]>>sbinfo->block_shift) + bitsperblock-1)
 	          / bitsperblock;
 	for (i = 0; i < nblocks; i++) {
-	    struct buffer_head *bh = bread(sb->s_dev,start+i,sb->s_blocksize);
+	    struct buffer_head *bh;
+	    bh = bread(sb->s_dev,start+i,sb->s_blocksize);
 	    if (!bh) {
 		ps2fs_error(sb, "count_used_blocks", "unable to retrieve"
 			    " bitmap block %ld for subpart %d\n", i, part);

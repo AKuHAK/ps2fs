@@ -133,10 +133,12 @@ static int ps2fs_readdir(struct file *file, void *dirent, filldir_t filldir)
 
     for (; pagenum < npages; pagenum++, pageofs = 0)
     {
-        struct page         *page = ps2fs_get_page(inode, pagenum);
+        struct page         *page;
         struct ps2fs_dirent *ps2de;
         char                *ptr, *end;
+        char                 buf[PS2FS_NAME_LEN + 1];
 
+        page = ps2fs_get_page(inode, pagenum);
         if (IS_ERR(page))
             continue;
         ptr = page_address(page);
@@ -147,7 +149,6 @@ static int ps2fs_readdir(struct file *file, void *dirent, filldir_t filldir)
         ps2de = (struct ps2fs_dirent *) (ptr + pageofs);
         for (; (char *) ps2de <= end; ps2de = ps2fs_next_dirent(ps2de))
         {
-            char buf[PS2FS_NAME_LEN + 1];
             pageofs = (char *) ps2de - ptr;
             if (!ps2de->inode || !ps2de->namelen)
                 continue;
@@ -470,8 +471,8 @@ static int ps2fs_remove_dirent(struct inode *dir, const char *name)
                 }
                 else
                 {
-                    int size =
-                        le16_to_cpu(ps2de->size_flags) & PS2FS_DIRENT_SIZEMASK;
+                    int size;
+                    size = le16_to_cpu(ps2de->size_flags) & PS2FS_DIRENT_SIZEMASK;
                     size += le16_to_cpu(last->size_flags);
                     last->size_flags = cpu_to_le16(size);
                 }
@@ -501,10 +502,12 @@ static ino_t ps2fs_inode_by_name(struct inode *dir, struct dentry *dentry,
 
     for (pagenum = 0; pagenum < npages; pagenum++)
     {
-        struct page         *page = ps2fs_get_page(dir, pagenum);
+        struct page         *page;
         struct ps2fs_dirent *ps2de;
         char                *ptr, *end;
+        char                 buf[PS2FS_NAME_LEN + 1];
 
+        page = ps2fs_get_page(dir, pagenum);
         if (IS_ERR(page))
             continue;
         ptr = page_address(page);
@@ -515,7 +518,6 @@ static ino_t ps2fs_inode_by_name(struct inode *dir, struct dentry *dentry,
         ps2de = (struct ps2fs_dirent *) ptr;
         for (; (char *) ps2de <= end; ps2de = ps2fs_next_dirent(ps2de))
         {
-            char buf[PS2FS_NAME_LEN + 1];
             if (!ps2de->inode || !ps2de->namelen)
                 continue;
             memcpy(buf, ps2de->name, ps2de->namelen);
@@ -550,10 +552,11 @@ static ino_t ps2fs_check_dir_empty(struct inode *dir)
 
     for (pagenum = 0; pagenum < npages; pagenum++)
     {
-        struct page         *page = ps2fs_get_page(dir, pagenum);
+        struct page         *page;
         struct ps2fs_dirent *ps2de;
         char                *ptr, *end;
 
+        page = ps2fs_get_page(dir, pagenum);
         if (IS_ERR(page))
             continue;
         ptr = page_address(page);
