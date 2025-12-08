@@ -28,20 +28,22 @@ This driver allows read-only access to the PlayStation 2 filesystem under Linux.
 
 ### MIPS Target Compilation
 
-For MIPS targets (PlayStation 2), the module is compiled with kernel version 2.4.17_mvl21 by default. If you need to compile for a different kernel version (e.g., 2.4.27_mvl21), you can override this:
+For MIPS targets (PlayStation 2), the module is compiled with kernel version 2.4.17_mvl21 by default:
 
 ```bash
-make mips MIPS_KERNEL_VERSION=2.4.27_mvl21
+make mips
 ```
 
-For kernel versions other than 2.4.17, you may also need to set the `MIPS_LINUX_VERSION_CODE`:
+If you need to compile for a different kernel version (e.g., 2.4.27_mvl21), override both the version string and version code:
 
 ```bash
-# For kernel 2.4.27: KERNEL_VERSION(2,4,27) = (2<<16) + (4<<8) + 27 = 132123
+# For kernel 2.4.27_mvl21: Use KERNEL_VERSION(2,4,27) = (2<<16) + (4<<8) + 27 = 132123
 make mips MIPS_KERNEL_VERSION=2.4.27_mvl21 MIPS_LINUX_VERSION_CODE=132123
 ```
 
 This ensures the compiled module matches your target kernel version and avoids "kernel-module version mismatch" errors during `insmod`.
+
+**Note**: The `MIPS_LINUX_VERSION_CODE` must match the Linux `KERNEL_VERSION(major, minor, patch)` macro value for your target kernel.
 
 ## Mounting the Filesystem
 

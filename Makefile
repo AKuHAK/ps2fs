@@ -5,7 +5,8 @@
 CC = gcc
 MIPS_CC = mipsEEel-linux-gcc
 MIPS_LD = mipsEEel-linux-ld
-# Default kernel version for MIPS target (can be overridden with MIPS_KERNEL_VERSION=2.4.27_mvl21)
+# Default kernel version for MIPS target
+# Override with: make mips MIPS_KERNEL_VERSION=2.4.27_mvl21 MIPS_LINUX_VERSION_CODE=132123
 MIPS_KERNEL_VERSION ?= 2.4.17_mvl21
 # LINUX_VERSION_CODE for kernel 2.4.17 (needed for version checks in source code)
 MIPS_LINUX_VERSION_CODE ?= 132113
