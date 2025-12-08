@@ -528,7 +528,8 @@ void ps2fs_put_inode(struct inode *inode)
 {
     if (atomic_read(&inode->i_count) == 1)
     {
-        struct ps2fs_inode *ps2inode = PS2FS_INODE(inode)->rawinode;
+        struct ps2fs_inode *ps2inode;
+        ps2inode = PS2FS_INODE(inode)->rawinode;
         if (ps2inode)
         {
             dprintk("--- kfreeing 0x%08lX\n", inode->i_ino);

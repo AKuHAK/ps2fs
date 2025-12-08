@@ -144,7 +144,9 @@ long get_new_block(struct super_block *sb, long desired)
 	}
 	for (s = bh->b_data; s < (__u8 *)bh->b_data+sb->s_blocksize; s++) {
 	    if (*s != 0xFF) {
-		int bit = 0, val = *s;
+		int bit, val;
+		bit = 0;
+		val = *s;
 		while (val & 1) {
 		    bit++;
 		    val >>= 1;
