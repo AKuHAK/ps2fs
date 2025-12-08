@@ -26,6 +26,16 @@ This driver allows read-only access to the PlayStation 2 filesystem under Linux.
 5. The driver compiles to `ps2fs.o`. Load it using `insmod`.
 6. For PS2 kernels, statically linking the driver is recommended.
 
+### MIPS Target Compilation
+
+For MIPS targets (PlayStation 2), the module is compiled with kernel version 2.4.17_mvl21 by default. If you need to compile for a different kernel version (e.g., 2.4.27_mvl21), you can override this:
+
+```bash
+make mips MIPS_KERNEL_VERSION=2.4.27_mvl21
+```
+
+This ensures the compiled module matches your target kernel version and avoids "kernel-module version mismatch" errors during `insmod`.
+
 ## Mounting the Filesystem
 
 The PS2 filesystem uses Linux-style partitions.  Mount using the `mount` command with the `partition=` option:
