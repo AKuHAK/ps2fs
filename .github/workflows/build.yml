@@ -1,0 +1,51 @@
+name: Build PS2 2.4.17 Kernel (ps2toolchain)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+    working-directory: linux-2.4.17_ps2  # Adjust to your kernel source directory
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ARCH: mips
+      CROSS_COMPILE: mipsEEel-linux-
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Show host info
+        run: |
+          uname -a
+          docker version
+
+      - name: Pull PS2 toolchain image
+        run: |
+          docker pull akuhak/ps2-legacy-woody-slim:latest
+
+      - name: Build inside PS2 container
+        run: |
+          # Run all build logic inside the container
+          docker run --rm \
+            -e ARCH \
+            -e CROSS_COMPILE \
+            -v "${GITHUB_WORKSPACE}:/work" \
+            -w "/work/" \
+            akuhak/ps2-legacy-woody-slim:latest \
+            sh -c '
+              make mips
+            '
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v5
+        with:
+          path: ps2fs.o
+          if-no-files-found: warn
