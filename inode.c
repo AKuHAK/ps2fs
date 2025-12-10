@@ -376,7 +376,7 @@ void ps2fs_read_inode(struct inode *inode)
     struct super_block   *sb       = inode->i_sb;
     struct ps2fs_sb_info *sbinfo   = PS2FS_SB(sb);
     struct ps2fs_inode   *ps2inode = NULL;
-    unsigned long         blocksize;
+    __u32                 blocksize;
 
     dprintk("read_inode(%08lX) mode=%07o\n", inode->i_ino, (int) inode->i_mode);
     /* Sanity check on inode number */
@@ -410,8 +410,7 @@ void ps2fs_read_inode(struct inode *inode)
     inode->i_mtime  = from_ps2time(&ps2inode->mtime) - sbinfo->tzoffset;
     inode->i_size   = le32_to_cpu(ps2inode->size);
     blocksize       = 1 << (9 + sbinfo->block_shift);
-    inode->i_blocks = (((inode->i_size + (blocksize - 1)) & -blocksize) >> 9) +
-                      (blocksize >> 9); /* count inode block as well */
+    inode->i_blocks = ((inode->i_size + (blocksize - 1)) & -blocksize) >> 9;
     inode->i_mode = S_IRUSR | S_IRGRP | S_IROTH;
     if (!(sb->s_flags & MS_RDONLY))
         inode->i_mode |= S_IWUSR;
@@ -780,7 +779,7 @@ int ps2fs_get_block(struct inode *inode, long iblock,
     if (create)
     {
         long block;
-        long nextblock; /* Block after last block in file */
+        __u32 nextblock; /* Block after last block in file */
 
         if (iblock != 0)
         {

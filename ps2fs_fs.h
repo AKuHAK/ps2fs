@@ -130,8 +130,8 @@ extern struct address_space_operations ps2fs_aops;
 
 /**** bitmap.c ****/
 extern long count_used_blocks(struct super_block *sb);
-extern long get_new_block(struct super_block *sb, long desired);
-extern int  free_block(struct super_block *sb, long block);
+extern long get_new_block(struct super_block *sb, __u32 desired);
+extern int  free_block(struct super_block *sb, __u32 block);
 
 /**** dir.c ****/
 extern __s32 last_mode;

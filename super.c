@@ -259,7 +259,7 @@ static int ps2fs_statfs(struct super_block *sb, struct statfs *sf, int bufsiz)
         return count;
     sf->f_type   = PS2FS_SUPER_MAGIC;
     sf->f_bsize  = sb->s_blocksize;
-    sf->f_blocks = size - (sbinfo->root_inode << sbinfo->block_shift);
+    sf->f_blocks = size;
     sf->f_bfree  = sf->f_blocks - count;
     sf->f_bavail = sf->f_bfree;
     sf->f_files  = -1;

@@ -36,11 +36,11 @@ long count_used_blocks(struct super_block *sb)
 
     struct ps2fs_sb_info *sbinfo = PS2FS_SB(sb);
     int bitsperblock = sb->s_blocksize * 8;
-    unsigned long count = 0;
+    __u32 count = 0;
     int part;
 
     for (part = 0; part < sbinfo->n_subparts; part++) {
-	unsigned long start, nblocks, i;
+	__u32 start, nblocks, i;
 	const unsigned char *s;
 
 	/* FIXME: make this into a macro or inline function? */
@@ -65,7 +65,7 @@ long count_used_blocks(struct super_block *sb)
 	    brelse(bh);
 	}
     }
-    return (count - sbinfo->root_inode) << sbinfo->block_shift;
+    return count << sbinfo->block_shift;
 }
 
 /*************************************************************************/
@@ -77,12 +77,12 @@ long count_used_blocks(struct super_block *sb)
  * Note: bit 0 (0x01) is the first block in the byte.
  */
 
-long get_new_block(struct super_block *sb, long desired)
+long get_new_block(struct super_block *sb, __u32 desired)
 {
     struct ps2fs_sb_info *sbinfo = PS2FS_SB(sb);
     int bitsperblock = sb->s_blocksize * 8;
     int part;
-    unsigned long start, nblocks, i;
+    __u32 start, nblocks, i;
     __u8 *s;
     struct buffer_head *bh;
 
@@ -186,12 +186,12 @@ long get_new_block(struct super_block *sb, long desired)
  * error code on failure.
  */
 
-int free_block(struct super_block *sb, long block)
+int free_block(struct super_block *sb, __u32 block)
 {
     struct ps2fs_sb_info *sbinfo = PS2FS_SB(sb);
     int bitsperblock = sb->s_blocksize * 8;
     int part;
-    unsigned long start, i;
+    __u32 start, i;
     __u8 *s;
     struct buffer_head *bh;
 
